@@ -1,0 +1,170 @@
+<div class="signup-container">
+  <div class="signup-box">
+    <h1>Create Account</h1>
+    <p class="subtitle">Join us as a Student</p>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <!-- First Name -->
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+          class="form-control"
+          [class.is-invalid]="submitted && f['firstName'].errors"
+          placeholder="Enter your first name"
+        />
+        <div class="error-message" *ngIf="submitted && f['firstName'].errors">
+          <span *ngIf="f['firstName'].errors['required']">First name is required</span>
+          <span *ngIf="f['firstName'].errors['minlength']">First name must be at least 2 characters</span>
+        </div>
+      </div>
+
+      <!-- Last Name -->
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          class="form-control"
+          [class.is-invalid]="submitted && f['lastName'].errors"
+          placeholder="Enter your last name"
+        />
+        <div class="error-message" *ngIf="submitted && f['lastName'].errors">
+          <span *ngIf="f['lastName'].errors['required']">Last name is required</span>
+          <span *ngIf="f['lastName'].errors['minlength']">Last name must be at least 2 characters</span>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.is-invalid]="submitted && f['email'].errors"
+          placeholder="Enter your email"
+        />
+        <div class="error-message" *ngIf="submitted && f['email'].errors">
+          <span *ngIf="f['email'].errors['required']">Email is required</span>
+          <span *ngIf="f['email'].errors['email']">Please enter a valid email</span>
+        </div>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input
+          type="tel"
+          id="phone"
+          formControlName="phone"
+          class="form-control"
+          [class.is-invalid]="submitted && f['phone'].errors"
+          placeholder="Enter 10-digit phone number"
+          maxlength="10"
+        />
+        <div class="error-message" *ngIf="submitted && f['phone'].errors">
+          <span *ngIf="f['phone'].errors['required']">Phone number is required</span>
+          <span *ngIf="f['phone'].errors['pattern']">Please enter a valid 10-digit phone number</span>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [class.is-invalid]="submitted && f['password'].errors"
+            placeholder="Enter your password"
+            (input)="onPasswordChange()"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="togglePassword()"
+            tabindex="-1"
+          >
+            {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+        <div class="error-message" *ngIf="submitted && f['password'].errors">
+          <span *ngIf="f['password'].errors['required']">Password is required</span>
+          <span *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</span>
+        </div>
+        <div class="password-strength" *ngIf="f['password'].value">
+          <div class="strength-bar">
+            <div class="strength-fill" [style.width.%]="passwordStrength" [ngClass]="'strength-' + getPasswordStrengthLabel().toLowerCase()"></div>
+          </div>
+          <span class="strength-label" [ngClass]="'label-' + getPasswordStrengthLabel().toLowerCase()">
+            Strength: {{ getPasswordStrengthLabel() }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="password-input-group">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            class="form-control"
+            [class.is-invalid]="submitted && (f['confirmPassword'].errors || signupForm.errors?.['passwordMismatch'])"
+            placeholder="Confirm your password"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="toggleConfirmPassword()"
+            tabindex="-1"
+          >
+            {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+        <div class="error-message" *ngIf="submitted && (f['confirmPassword'].errors || signupForm.errors?.['passwordMismatch'])">
+          <span *ngIf="f['confirmPassword'].errors?.['required']">Please confirm your password</span>
+          <span *ngIf="signupForm.errors?.['passwordMismatch']">Passwords do not match</span>
+        </div>
+      </div>
+
+      <!-- Terms Checkbox -->
+      <div class="form-group checkbox">
+        <input
+          type="checkbox"
+          id="termsAccepted"
+          formControlName="termsAccepted"
+          [class.is-invalid]="submitted && f['termsAccepted'].errors"
+        />
+        <label for="termsAccepted" class="checkbox-label">
+          I agree to the <a href="#">Terms and Conditions</a>
+        </label>
+        <div class="error-message" *ngIf="submitted && f['termsAccepted'].errors">
+          <span *ngIf="f['termsAccepted'].errors['required']">You must accept the terms</span>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loading"
+      >
+        {{ loading ? 'Creating Account...' : 'Sign Up' }}
+      </button>
+    </form>
+
+    <!-- Login Link -->
+    <div class="login-link">
+      Already have an account? <a routerLink="/login">Login here</a>
+    </div>
+  </div>
+</div>
